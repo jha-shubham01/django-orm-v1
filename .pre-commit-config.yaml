@@ -7,8 +7,9 @@
     rev: 22.3.0
     hooks:
     -   id: black
+        name: Formatting files
 -   repo: https://github.com/pycqa/isort
     rev: 5.10.1
     hooks:
     -   id: isort
-        name: isort (python)
+        name: Sorting imports
