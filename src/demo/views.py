@@ -111,3 +111,37 @@ class PostViewSet(viewsets.ModelViewSet):
 
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+
+    @action(detail=True, methods=["PATCH"])
+    def add_category(self, request, pk, *args, **kwargs):
+
+        categories = request.data.get("ids")
+        instance = self.get_object()
+
+        # Inefficient
+        # for category in categories:
+        #     instance.category.add(category)
+
+        # Efficient
+        categories = set(categories)
+        instance.category.add(*categories)
+
+        serializer = self.serializer_class(instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["PATCH"])
+    def set_category(self, request, pk, *args, **kwargs):
+
+        categories = request.data.get("ids")
+        instance = self.get_object()
+
+        # Inefficient
+        # instance.category.clear()
+        # categories = set(categories)
+        # instance.category.add(*categories)
+
+        # Efficient
+        instance.category.set(categories)
+
+        serializer = self.serializer_class(instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
