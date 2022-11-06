@@ -2,7 +2,7 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .models import Category, Comment, Like, Post
+from .models import STATUS, Category, Comment, Like, Post
 from .serializers import (
     CategorySerializer,
     CommentSerializer,
@@ -145,3 +145,45 @@ class PostViewSet(viewsets.ModelViewSet):
 
         serializer = self.serializer_class(instance)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["POST"])
+    def update_data(self, request, pk, *args, **kwargs):
+        summary = request.data.get("summary")
+        content = request.data.get("content")
+        Post.objects.filter(pk=pk).update(summary=summary, content=content)
+
+        return Response({"message": "Successfully updated the data."})
+
+    @action(detail=False, methods=["POST"])
+    def update_or_create_data(self, request, *args, **kwargs):
+        category = set(request.data.get("category"))
+        content = request.data.get("content")
+        summary = request.data.get("summary")
+        author = 1
+        title = request.data.get("title")
+
+        obj, created = Post.objects.update_or_create(
+            title=title,
+            defaults={
+                "summary": summary,
+                "content": content,
+                "author_id": author,
+            },
+        )
+        obj.category.set(category)
+        print(f"{created=}")
+
+        return Response({"message": "Successfully updated the data."})
+
+    @action(detail=False, methods=["POST"])
+    def bulk_update_data(self, request, *args, **kwargs):
+        ids = request.data.get("ids")
+
+        queryset = Post.objects.filter(id__in=ids)
+
+        for obj in queryset:
+            obj.status = STATUS.PUBLISH.value
+
+        queryset = Post.objects.bulk_update(queryset, ["status"])
+
+        return Response({"message": "Successfully updated the data."})
