@@ -116,7 +116,8 @@ class PostViewSet(viewsets.ModelViewSet):
     def add_category(self, request, pk, *args, **kwargs):
 
         categories = request.data.get("ids")
-        instance = self.get_object()
+        # instance = self.get_object()
+        instance = Post.objects.filter(pk=pk).first()
 
         # Inefficient
         # for category in categories:
@@ -133,7 +134,8 @@ class PostViewSet(viewsets.ModelViewSet):
     def set_category(self, request, pk, *args, **kwargs):
 
         categories = request.data.get("ids")
-        instance = self.get_object()
+        # instance = self.get_object()
+        instance = Post.objects.filter(pk=pk).first()
 
         # Inefficient
         # instance.category.clear()
