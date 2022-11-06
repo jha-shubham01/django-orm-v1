@@ -189,3 +189,40 @@ class PostViewSet(viewsets.ModelViewSet):
         queryset = Post.objects.bulk_update(queryset, ["status"])
 
         return Response({"message": "Successfully updated the data."})
+
+    @action(detail=False, methods=["GET"])
+    def get_all(self, request, *args, **kwargs):
+
+        queryset = Post.objects.all()
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=["GET"])
+    def get_one(self, request, *args, **kwargs):
+        slug = request.GET.get("slug")
+
+        # obj = Post.objects.get(slug=slug)
+        # obj = Post.objects.filter(slug=slug).first()
+
+        try:
+            obj = Post.objects.get(slug=slug)
+        except Post.MultipleObjectsReturned:
+            return Response(
+                {"message": "Multiple Objects found."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        except Post.DoesNotExist:
+            return Response(
+                {"message": "Object not found."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        serializer = self.serializer_class(obj)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=["GET"])
+    def get_filter(self, request, *args, **kwargs):
+        id = request.GET.get("id")
+        queryset = Post.objects.filter(id=id)
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
