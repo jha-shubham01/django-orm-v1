@@ -100,6 +100,13 @@ class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
+    @action(detail=False, methods=["GET"])
+    def deep_filter_data(self, request, *args, **kwargs):
+        # queryset = Comment.objects.all().filter(post__id=1)
+        queryset = Comment.objects.all().filter(post__category__id__in=[1, 2])
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class LikeViewSet(viewsets.ModelViewSet):
 
@@ -258,7 +265,15 @@ class PostViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=["GET"])
     def distinct_data(self, request, *args, **kwargs):
-        queryset = Post.objects.all().distinct()
+        queryset = (
+            Post.objects.all().filter(category__id__in=[1, 2]).distinct()
+        )
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=["GET"])
+    def deep_filter_data(self, request, *args, **kwargs):
+        queryset = Post.objects.all().filter(category__id__in=[1, 2])
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
