@@ -226,3 +226,26 @@ class PostViewSet(viewsets.ModelViewSet):
         queryset = Post.objects.filter(id=id)
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=["GET"])
+    def exclude_filter(self, request, *args, **kwargs):
+        id = request.GET.get("id")
+        queryset = Post.objects.exclude(id=id)
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=["GET"])
+    def limit_data(self, request, *args, **kwargs):
+        # queryset = Post.objects.all()[:1]
+        # queryset = Post.objects.all()[1:]
+        queryset = Post.objects.all()[1:2]
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=["GET"])
+    def lookup_filter(self, request, *args, **kwargs):
+        ids = request.GET.get("ids")
+        ids = ids.split(",")
+        queryset = Post.objects.filter(id__in=ids)
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
