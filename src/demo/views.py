@@ -249,3 +249,21 @@ class PostViewSet(viewsets.ModelViewSet):
         queryset = Post.objects.filter(id__in=ids)
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=["GET"])
+    def order_by_data(self, request, *args, **kwargs):
+        queryset = Post.objects.all().order_by("title")
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=["GET"])
+    def distinct_data(self, request, *args, **kwargs):
+        queryset = Post.objects.all().distinct()
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # @action(detail=False, methods=["GET"])
+    # def reverse_data(self, request, *args, **kwargs):
+    #     queryset = Post.objects.filter().reverse()
+    #     serializer = self.serializer_class(queryset, many=True)
+    #     return Response(serializer.data, status=status.HTTP_200_OK)
