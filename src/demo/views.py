@@ -8,6 +8,7 @@ from .serializers import (
     CommentSerializer,
     LikeSerializer,
     PostSerializer,
+    PostValuesSerializer,
 )
 
 
@@ -282,3 +283,25 @@ class PostViewSet(viewsets.ModelViewSet):
     #     queryset = Post.objects.filter().reverse()
     #     serializer = self.serializer_class(queryset, many=True)
     #     return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["GET"])
+    def get_values(self, request, pk, *args, **kwargs):
+        queryset0 = Post.objects.filter(pk=pk)
+        print(queryset0)
+        queryset = Post.objects.filter(pk=pk).values("id", "title", "slug")
+        # queryset = Post.objects.filter(author=pk).values("id", "title", "slug")
+        print(queryset)
+        serializer = PostValuesSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["GET"])
+    def get_values_list(self, request, pk, *args, **kwargs):
+        queryset0 = Post.objects.filter(pk=pk)
+        print(queryset0)
+        queryset = Post.objects.filter(pk=pk).values_list(
+            "id", "title", "slug"
+        )
+        # queryset = Post.objects.filter(author=pk).values_list("id", "title", "slug")
+        # queryset = Post.objects.filter(author=pk).values_list("title", flat=True)
+        print(queryset)
+        return Response(queryset, status=status.HTTP_200_OK)
