@@ -1,3 +1,4 @@
+from django.db.models import Q
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -305,3 +306,14 @@ class PostViewSet(viewsets.ModelViewSet):
         # queryset = Post.objects.filter(author=pk).values_list("title", flat=True)
         print(queryset)
         return Response(queryset, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["GET"])
+    def q_filter(self, request, pk, *args, **kwargs):
+        queryset = Post.objects.filter(Q(pk=pk))
+        # queryset = Post.objects.filter(Q(pk=pk)&Q(author=pk))
+        # queryset = Post.objects.filter(Q(pk=pk)|Q(author=pk))
+        # queryset = Post.objects.filter(~Q(pk=pk)&Q(author=pk))
+        # queryset = Post.objects.filter(Q(~Q(pk=pk)&Q(author=pk)&Q(category__in=[pk])))
+        print(queryset)
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
