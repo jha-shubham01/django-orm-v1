@@ -317,3 +317,11 @@ class PostViewSet(viewsets.ModelViewSet):
         print(queryset)
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=["GET"])
+    def lookup_filter_1(self, request, *args, **kwargs):
+        title = request.GET.get("title")
+        queryset = Post.objects.filter(title__exact=title)
+        # queryset = Post.objects.filter(title__iexact=title)
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
