@@ -33,6 +33,7 @@ class Post(models.Model):
         default="post/sample.jpg",
     )
     category = models.ManyToManyField(Category, related_name="posts")
+    views = models.IntegerField(default=0)
 
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
@@ -42,7 +43,9 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-    post = models.ForeignKey(Post, related_name="comments", on_delete=models.CASCADE)
+    post = models.ForeignKey(
+        Post, related_name="comments", on_delete=models.CASCADE
+    )
     author = models.ForeignKey(
         User,
         related_name="comments",

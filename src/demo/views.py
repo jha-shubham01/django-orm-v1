@@ -333,3 +333,19 @@ class PostViewSet(viewsets.ModelViewSet):
         # queryset = Post.objects.filter(title__icontains=title)
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=["GET"])
+    def lookup_filter_3(self, request, *args, **kwargs):
+        title = request.GET.get("title")
+        queryset = Post.objects.filter(title__startswith=title)
+        # queryset = Post.objects.filter(title__istartswith=title)
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=["GET"])
+    def lookup_filter_4(self, request, *args, **kwargs):
+        title = request.GET.get("title")
+        queryset = Post.objects.filter(title__endswith=title)
+        # queryset = Post.objects.filter(title__iendswith=title)
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
