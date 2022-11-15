@@ -360,16 +360,16 @@ class PostViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=["GET"])
     def lookup_filter_6(self, request, *args, **kwargs):
-        date = request.GET.get("date")
-        queryset = Post.objects.filter(created_on__date__gt=date)
-        # queryset = Post.objects.filter(created_on__date__gte=date)
+        views = request.GET.get("views")
+        queryset = Post.objects.filter(views__gt=views)
+        # queryset = Post.objects.filter(views__gte=views)
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=["GET"])
     def lookup_filter_7(self, request, *args, **kwargs):
-        date = request.GET.get("date")
-        queryset = Post.objects.filter(created_on__date__lt=date)
-        # queryset = Post.objects.filter(created_on__date__lte=date)
+        views = request.GET.get("views")
+        queryset = Post.objects.filter(views__lt=views)
+        # queryset = Post.objects.filter(views__lte=views)
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
