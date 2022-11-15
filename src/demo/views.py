@@ -349,3 +349,27 @@ class PostViewSet(viewsets.ModelViewSet):
         # queryset = Post.objects.filter(title__iendswith=title)
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=["GET"])
+    def lookup_filter_5(self, request, *args, **kwargs):
+        ids = request.GET.get("ids")
+        ids = ids.split(",")
+        queryset = Post.objects.filter(id__in=ids)
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=["GET"])
+    def lookup_filter_6(self, request, *args, **kwargs):
+        date = request.GET.get("date")
+        queryset = Post.objects.filter(created_on__date__gt=date)
+        # queryset = Post.objects.filter(created_on__date__gte=date)
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=["GET"])
+    def lookup_filter_7(self, request, *args, **kwargs):
+        date = request.GET.get("date")
+        queryset = Post.objects.filter(created_on__date__lt=date)
+        # queryset = Post.objects.filter(created_on__date__lte=date)
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
