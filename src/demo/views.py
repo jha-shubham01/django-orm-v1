@@ -21,12 +21,12 @@ class CategoryViewSet(viewsets.ModelViewSet):
         data = self.serializer_class(data=request.data or None)
         data.is_valid(raise_exception=True)
 
-        title = data.validated_data.get("title")
-        slug = data.validated_data.get("slug")
-        description = data.validated_data.get("description")
+        title_data = data.validated_data.get("title")
+        slug_data = data.validated_data.get("slug")
+        description_data = data.validated_data.get("description")
 
         obj = Category.objects.create(
-            title=title, slug=slug, description=description
+            title=title_data, slug=slug_data, description=description_data
         )
         serializer = self.serializer_class(obj)
 
@@ -37,14 +37,14 @@ class CategoryViewSet(viewsets.ModelViewSet):
         data = self.serializer_class(data=request.data or None)
         data.is_valid(raise_exception=True)
 
-        title = data.validated_data.get("title")
-        slug = data.validated_data.get("slug")
-        description = data.validated_data.get("description")
+        title_data = data.validated_data.get("title")
+        slug_data = data.validated_data.get("slug")
+        description_data = data.validated_data.get("description")
 
         obj = Category()
-        obj.title = title
-        obj.slug = slug
-        obj.description = description
+        obj.title = title_data
+        obj.slug = slug_data
+        obj.description = description_data
         obj.save()
 
         serializer = self.serializer_class(obj)
@@ -56,10 +56,10 @@ class CategoryViewSet(viewsets.ModelViewSet):
         data = self.serializer_class(data=request.data or None)
         data.is_valid(raise_exception=True)
 
-        title = data.validated_data.get("title")
-        slug = data.validated_data.get("slug")
+        title_data = data.validated_data.get("title")
+        slug_data = data.validated_data.get("slug")
 
-        obj, _ = Category.objects.get_or_create(title=title, slug=slug)
+        obj, _ = Category.objects.get_or_create(title=title_data, slug=slug_data)
 
         serializer = self.serializer_class(obj)
 
