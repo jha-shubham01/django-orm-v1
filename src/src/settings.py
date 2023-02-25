@@ -78,12 +78,12 @@ WSGI_APPLICATION = "src.wsgi.application"
 # }
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": "orm_db",
-        "USER": "root",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "orm_v1",
+        "USER": "shubham",
         "PASSWORD": "password",
         "HOST": "localhost",
-        "PORT": "3306",
+        "PORT": "",
     }
 }
 

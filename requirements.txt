@@ -2,4 +2,4 @@ django==4.1.2
 djangorestframework==3.14.0
 django-debug-toolbar==3.7.0
 Pillow==9.2.0
-pymysql==1.0.2
+psycopg2==2.9.5
